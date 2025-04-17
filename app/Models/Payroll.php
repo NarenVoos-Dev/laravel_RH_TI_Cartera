@@ -11,16 +11,23 @@ class Payroll extends Model
     use HasFactory;
 
     protected $fillable = [
-        'period',
+        'company_id',
+        'start_date',
+        'end_date',
         'payment_date',
+        'total_earnings',
+        'total_deductions',
+        'total_net_pay',
+        'status',
     ];
 
-    protected $casts = [
-        'payment_date' => 'date',
-    ];
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
     // Relación con PayrollDetails (Una nómina tiene muchos detalles)
-    public function payrollDetails(): HasMany
+    public function details()
     {
         return $this->hasMany(PayrollDetail::class);
     }

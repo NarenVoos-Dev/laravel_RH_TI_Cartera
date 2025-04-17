@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payrolls', function (Blueprint $table) {
-            $table->id();
-            $table->string('period');
-            $table->date('payment_date');
-            $table->timestamps();
+        Schema::table('payroll_detail_items', function (Blueprint $table) {
+            $table->unsignedBigInteger('concept_id')->nullable()->change();
         });
     }
 
@@ -24,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payrolls');
+        //
     }
 };

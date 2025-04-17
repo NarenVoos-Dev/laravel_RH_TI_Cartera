@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 @section('title','Compañias')
 @section('page-title','Bienvenido')
@@ -92,52 +91,46 @@ $(document).ready(function() {
 
     //etiquetas de los botones de acción
     $('[data-bs-toggle="tooltip"]').tooltip();
-    
-    //Crear compañia en el modal
-    $("#createCompanyForm").submit(function (event) {
-        event.preventDefault(); // Evita la recarga de la página
 
-        let formData = {
-            name: $("#nombreEmpresa").val(),
-            nit: $("#nitEmpresa").val(),
-            address: $("#direccionEmpresa").val(),
-            phone: $("#telefonoEmpresa").val(),
-            email: $("#emailEmpresa").val(),
-            status: $("#estadoEmpresa").val(),
-        };
+    //Crear compañia en el modal
+    $("#createCompanyForm").submit(function(event) {
+        event.preventDefault();
+
+        // Usa FormData para enviar los datos correctamente
+        let formData = new FormData();
+        formData.append('name', $("#nombreEmpresa").val());
+        formData.append('nit', $("#nitEmpresa").val());
+        formData.append('address', $("#direccionEmpresa").val());
+        formData.append('phone', $("#telefonoEmpresa").val());
+        formData.append('email', $("#emailEmpresa").val());
+        formData.append('status', $("#estadoEmpresa").val());
+        formData.append('_token', $('meta[name="csrf-token"]').attr("content"));
 
         $.ajax({
             url: "/companies",
             type: "POST",
-            data: JSON.stringify(formData),
-            contentType: "application/json",
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
-            },
-            success: function () {
-                $("#createCompanyModal").modal("hide"); // Ocultar el modal
+            data: formData, // Envía FormData directamente
+            processData: false, // Importante!
+            contentType: false, // Importante!
+            success: function(response) {
+                $("#createCompanyModal").modal("hide");
                 Swal.fire({
                     title: "¡Empresa Creada!",
-                    text: "La empresa ha sido creada exitosamente.",
-                    icon: "success",
-                    confirmButtonText: "OK"
-                }).then(() => location.reload()); // Recargar la tabla
+                    text: response.message ||
+                        "La empresa ha sido creada exitosamente.",
+                    icon: "success"
+                }).then(() => location.reload());
             },
-            error: function (xhr) {
-                $("#createCompanyModal").modal("hide"); // Ocultar el modal
+            error: function(xhr) {
+                let errorMsg = 'Ocurrió un error al crear la empresa.';
 
                 if (xhr.status === 422) {
-                    let errors = xhr.responseJSON.errors;
-                    let errorMsg = '';
-
-                    Object.keys(errors).forEach(function (key) {
-                        errorMsg += errors[key][0] + '\n';
-                    });
-                    
-                    Swal.fire('Errores de validación', errorMsg, 'warning');
-                } else {
-                    Swal.fire('Error', 'Ocurrió un error al crear la empresa.', 'error');
+                    errorMsg = xhr.responseJSON.errors ?
+                        Object.values(xhr.responseJSON.errors).join('\n') :
+                        'Errores de validación';
                 }
+
+                Swal.fire('Error', errorMsg, 'error');
             }
         });
     });
@@ -172,7 +165,7 @@ $(document).ready(function() {
 
     // Cuando se envíe el formulario de actualización
     // Actualizar empresa en el modal
-    $("#editCompanyForm").on("submit", function (e) {
+    $("#editCompanyForm").on("submit", function(e) {
         e.preventDefault();
 
         let companyId = $("#editCompanyId").val();
@@ -194,7 +187,7 @@ $(document).ready(function() {
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
             },
-            success: function (response) {
+            success: function(response) {
                 $("#editCompanyModal").modal("hide");
                 Swal.fire({
                     title: "¡Empresa actualizada!",
@@ -205,12 +198,13 @@ $(document).ready(function() {
                     location.reload();
                 });
             },
-            error: function (xhr) {
+            error: function(xhr) {
                 if (xhr.status === 422) {
                     // Errores de validación
                     let errors = xhr.responseJSON.errors;
-                    let messages = Object.values(errors).map(msgArr => msgArr.join(" ")).join("\n");
-                    
+                    let messages = Object.values(errors).map(msgArr => msgArr.join(" "))
+                        .join("\n");
+
                     Swal.fire({
                         title: "Error de validación",
                         text: messages,
@@ -232,7 +226,7 @@ $(document).ready(function() {
     });
 
     // Eliminar empresa en el modal
-    $(document).on('click', '.btn-delete', function () {
+    $(document).on('click', '.btn-delete', function() {
         let companyId = $(this).data('id'); // Obtener el ID desde el botón
 
         Swal.fire({
@@ -253,7 +247,7 @@ $(document).ready(function() {
                     headers: {
                         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                     },
-                    success: function (response) {
+                    success: function(response) {
                         Swal.fire(
                             'Eliminado',
                             response.message,
@@ -262,10 +256,11 @@ $(document).ready(function() {
                         // Recargar DataTable o actualizar la vista
                         location.reload();
                     },
-                    error: function (xhr) {
+                    error: function(xhr) {
                         Swal.fire(
                             'Error',
-                            xhr.responseJSON.message || 'Hubo un problema al eliminar la empresa.',
+                            xhr.responseJSON.message ||
+                            'Hubo un problema al eliminar la empresa.',
                             'error'
                         );
                     }
@@ -278,8 +273,6 @@ $(document).ready(function() {
 
 
 });
-
-
 </script>
 
 

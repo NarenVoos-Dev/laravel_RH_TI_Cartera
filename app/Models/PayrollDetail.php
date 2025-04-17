@@ -19,6 +19,7 @@ class PayrollDetail extends Model
         'total_earnings',
         'total_deductions',
         'net_salary',
+        'observations',
     ];
 
     // Relación con la nómina general
@@ -31,5 +32,10 @@ class PayrollDetail extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class);
+    }
+    //relacion con los items de devengado y deducciones
+    public function items()
+    {
+        return $this->hasMany(PayrollDetailItem::class);
     }
 }

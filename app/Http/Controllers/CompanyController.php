@@ -23,8 +23,7 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-    
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'nit' => 'required|string|max:50|unique:companies,nit',
             'address' => 'nullable|string|max:255',
@@ -32,40 +31,22 @@ class CompanyController extends Controller
             'email' => 'nullable|email|max:255',
             'status' => 'required|in:active,inactive',
         ]);
-
-            // Si hay errores de validación, devolver respuesta
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Errores de validación',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
+    
         try {
-            // Crear la empresa
-            $company = Company::create([
-                'name' => $request->name,
-                'nit' => $request->nit,
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'status' => $request->status,
-            ]);
-
-            // Si la empresa se creó correctamente, devolver respuesta
+            $company = Company::create($validated);
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Empresa creada correctamente',
                 'company' => $company
             ], 201);
-        }catch(\Exception $e) {
+            
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al crear la empresa',
-                'error' => $e->getMessage()
+                'message' => 'Error al crear la empresa: ' . $e->getMessage()
             ], 500);
-        }       
+        }
     }
     
 

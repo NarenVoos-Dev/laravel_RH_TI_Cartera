@@ -51,10 +51,11 @@
 </div>
 
 <!--/ Basic Bootstrap Table -->
-
-@endsection
 @include('roles.modalCreate')
 @include('roles.modalEdit')
+
+@endsection
+
 
 @push('scripts')
 <script>

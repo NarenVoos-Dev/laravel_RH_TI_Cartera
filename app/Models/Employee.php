@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Employee extends Model
 {
@@ -33,8 +35,23 @@ class Employee extends Model
         return $this->hasMany(EmployeeCompany::class);
     }
 
+
     public function currentAssignment()
     {
-        return $this->hasOne(EmployeeCompany::class)->whereNull('removed_at');
+        return $this->hasOne(EmployeeCompany::class)->latestOfMany();
     }
+
+        // Employee.php
+    public function currentCompany()
+    {
+        return $this->hasOne(EmployeeCompany::class)->latest(); // o donde determines la empresa activa
+    }
+
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'employee_company')
+                    ->withPivot('assigned_at', 'removed_at')
+                    ->withTimestamps();
+    }
+
 }

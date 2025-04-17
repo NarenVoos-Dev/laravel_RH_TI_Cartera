@@ -54,10 +54,11 @@
     </div>
 
 </div>
-
-@endsection
 @include('users.modal-Create')
 @include('users.modal-Edit')
+
+@endsection
+
 
 @push('scripts')
 <script>

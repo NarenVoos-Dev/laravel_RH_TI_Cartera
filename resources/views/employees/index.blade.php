@@ -58,9 +58,11 @@
     </div>
 </div>
 
-@endsection
 @include('employees.modal-create')
 @include('employees.modal-edit')
+
+@endsection
+
 
 @push('scripts')
 <script>

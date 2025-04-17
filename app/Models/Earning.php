@@ -9,16 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Earning extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'payroll_detail_id',
-        'concept',
-        'amount',
+        'name',
+        'default_value',
+        'is_editable',
+        'is_taxable',
     ];
 
-    // Relación con el detalle de nómina
-    public function payrollDetail()
-    {
-        return $this->belongsTo(PayrollDetail::class);
-    }
 }

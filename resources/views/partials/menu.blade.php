@@ -48,8 +48,7 @@
             <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
         </a>
 
-        <a href="javascript:void(0);"
-            class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="align-middle bx bx-chevron-left bx-sm"></i>
         </a>
     </div>
@@ -58,60 +57,101 @@
 
     <ul class="py-1 menu-inner">
         <!-- Dashboard -->
-        <li class="menu-item active">
+        <li class="menu-item ">
             <a href="index.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
+                <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
+                <div>Dashboard</div>
             </a>
         </li>
-        <!-- Fin Dashboard -->
-
+        <li class="menu-item">
+            <a href="{{ route('cartera.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-wallet"></i>
+                <div>Cartera</div>
+            </a>
+        </li>
+        <!-- Nomina -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Account Settings">Contrataciones</div>
+                <i class="menu-icon tf-icons bx bx-credit-card"></i>
+                <div>Nomina</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('employees.index') }}" class="menu-link">
-                        <div data-i18n="Account">Empleados</div>
+                    <a href="{{ route('payrolls.create') }}" class="menu-link">
+                        <i class="bx bx-calculator"></i>
+                        <div>Liquidar Nómina</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('assignments.index') }}" class="menu-link">
-                        <div data-i18n="Notifications">Asignaciones</div>
+                    <a href="{{ route('payrolls.index') }}" class="menu-link">
+                        <i class="bx bx-history"></i>
+                        <div>Historial de Nóminas</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="pages-account-settings-connections.html" class="menu-link">
-                        <div data-i18n="Connections">Connections</div>
+                    <a href="#" class="menu-link">
+                        <i class="bx bx-file"></i>
+                        <div>Desprendibles</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('configuration.index') }}" class="menu-link">
+                        <i class="bx bx-cog"></i>
+                        <div>Configuraciones</div>
                     </a>
                 </li>
             </ul>
         </li>
 
+        <!-- Contrataciones -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Account Settings">Configuracion</div>
+                <i class="menu-icon tf-icons bx bx-briefcase-alt-2"></i>
+                <div>Contrataciones</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('employees.index') }}" class="menu-link">
+                        <i class="bx bx-user"></i>
+                        <div>Empleados</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('assignments.index') }}" class="menu-link">
+                        <i class="bx bx-task"></i>
+                        <div>Asignaciones</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Configuración -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-cog"></i>
+                <div>Configuración</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="{{ route('roles.index') }}" class="menu-link">
-                        <div data-i18n="Account">Roles</div>
+                        <i class="bx bx-id-card"></i>
+                        <div>Roles</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="{{ route('users.index') }}" class="menu-link">
-                        <div data-i18n="Notifications">Usuarios</div>
+                        <i class="bx bx-user-circle"></i>
+                        <div>Usuarios</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="{{ route('companies.index') }}" class="menu-link">
-                        <div data-i18n="Connections">Compañias</div>
+                        <i class="bx bx-buildings"></i>
+                        <div>Compañías</div>
                     </a>
                 </li>
             </ul>
         </li>
     </ul>
+
 </aside>

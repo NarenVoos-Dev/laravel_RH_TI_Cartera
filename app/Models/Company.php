@@ -32,5 +32,6 @@ class Company extends Model
                     ->withPivot('assigned_at', 'removed_at')
                     ->withTimestamps();
     }
+    
 
 }

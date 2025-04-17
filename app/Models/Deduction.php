@@ -11,13 +11,12 @@ class Deduction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payroll_detail_id',
-        'concept',
-        'amount',
+        'name',
+        'percentage',
+        'is_mandatory',
+        'is_editable',
     ];
-    // Relación con el detalle de nómina
-    public function payrollDetail()
-    {
-        return $this->belongsTo(PayrollDetail::class);
-    }
+
 }
+
+

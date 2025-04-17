@@ -13,14 +13,20 @@ return new class extends Migration
     {
         Schema::create('payroll_details', function (Blueprint $table) {
             $table->id();
+        
             $table->foreignId('payroll_id')->constrained()->onDelete('cascade');
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+        
             $table->decimal('base_salary', 10, 2);
-            $table->decimal('days_worked', 10, 2)->default(0); // Días trabajados
-            $table->decimal('transport_aid', 10, 2)->nullable();
-            $table->decimal('total_earnings', 10, 2)->default(0); // Total de devengados
-            $table->decimal('total_deductions', 10, 2)->default(0); // Total de descuentos
-            $table->decimal('net_salary', 10, 2)->default(0); // Salario final después de descuentos
+            $table->unsignedTinyInteger('days_worked')->default(0); // Ej: 15 días
+            $table->decimal('transport_aid', 10, 2)->default(0);
+        
+            $table->decimal('total_earnings', 10, 2)->default(0);
+            $table->decimal('total_deductions', 10, 2)->default(0);
+            $table->decimal('net_salary', 10, 2)->default(0);
+        
+            $table->text('observations')->nullable(); // Para novedades o ajustes manuales
+        
             $table->timestamps();
         });
     }

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('deductions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('payroll_detail_id')->constrained()->onDelete('cascade');
-            $table->string('concept'); // Ejemplo: "Salud", "Pensión", "Préstamos"
-            $table->decimal('amount', 10, 2);
+            $table->string('name'); // Ej: Salud, Pensión, Fondo de solidaridad
+            $table->decimal('percentage', 5, 2)->nullable(); // Ej: 4.00 (%)
+            $table->boolean('is_mandatory')->default(true); // Si se aplica automáticamente según condiciones
+            $table->boolean('is_editable')->default(true); // Si se puede ajustar en liquidación
             $table->timestamps();
         });
     }

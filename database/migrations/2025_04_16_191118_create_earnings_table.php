@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('earnings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('payroll_detail_id')->constrained()->onDelete('cascade');
-            $table->string('concept'); // Ejemplo: "Horas Extras", "Auxilio de Transporte"
-            $table->decimal('amount', 10, 2);
+            $table->string('name'); // Ej: Sueldo básico, Auxilio de transporte, Horas extra
+            $table->decimal('default_value', 12, 2)->nullable(); // Para conceptos fijos (opcional)
+            $table->boolean('is_editable')->default(true); // Si el valor puede cambiar al momento de liquidar
+            $table->boolean('is_taxable')->default(true); // Si afecta retención
             $table->timestamps();
         });
     }
