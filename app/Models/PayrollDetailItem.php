@@ -18,10 +18,12 @@ class PayrollDetailItem extends Model
         'amount',
     ];
 
-    public function detail()
+    public function payrollDetail()
     {
         return $this->belongsTo(PayrollDetail::class, 'payroll_detail_id');
     }
+
+    
 
     public function concept()
     {

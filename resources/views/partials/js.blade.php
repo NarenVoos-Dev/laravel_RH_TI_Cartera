@@ -37,5 +37,24 @@
         document.body.style.opacity = "1";
     });
 
+    //load loading overlay
+
+    function toggleLoader(visible = true, customMessage = null) {
+        const overlay = document.getElementById("loadingOverlay");
+        if (!overlay) return;
+
+        overlay.style.display = visible ? "block" : "none";
+        if (customMessage) {
+            overlay.querySelector("h5").innerText = customMessage;
+        }
+    }
+
+    // Activación automática al enviar formularios con clase .show-loader
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("form.show-loader").forEach(form => {
+            form.addEventListener("submit", () => toggleLoader(true));
+        });
+    });
+
     
 </script>

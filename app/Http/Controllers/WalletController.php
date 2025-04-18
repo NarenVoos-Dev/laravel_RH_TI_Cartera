@@ -112,6 +112,7 @@ class WalletController extends Controller
             'amount' => 'required|numeric|min:0.01',
             'payment_date' => 'required|date',
             'description' => 'nullable|string|max:255',
+            'status' => 'required|in:descontar,pagado,cancelado',
         ]);
 
         try {
@@ -123,11 +124,22 @@ class WalletController extends Controller
                 'amount' => $request->amount,
                 'payment_date' => $request->payment_date,
                 'description' => $request->description ?? '',
+                'status' => $request->status,
             ]);
     
             // Actualizar el balance de la cartera
-            $wallet->balance -= $request->amount;
-            $wallet->save();
+            if($wallet->balance - $request->amount < 0) {
+                $wallet->balance = 0;
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El abono excede el saldo de la cartera.',
+                    'error' => e->getMessage('El abono excede el saldo de la cartera.')
+                ], 422);
+            } else {
+                $wallet->balance -= $request->amount;
+                $wallet->save();
+
+            }
     
             return response()->json([
                 'success' => true,

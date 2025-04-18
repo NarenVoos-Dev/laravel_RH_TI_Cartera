@@ -165,7 +165,8 @@ $(document).ready(function() {
             wallet_id: walletId,
             payment_date: $('#payment_date').val(),
             amount: $('#amount').val(),
-            description: $('#description').val()
+            description: $('#description').val(),
+            status: $('#status').val()
         };
 
         $.ajax({
@@ -183,6 +184,7 @@ $(document).ready(function() {
                 });
             },
             error: function (xhr) {
+                $('#abonarModal').modal('hide');
                 console.log('Error:', xhr);
                 if (xhr.status === 422 && xhr.responseJSON?.errors) {
                     let errores = xhr.responseJSON.errors;

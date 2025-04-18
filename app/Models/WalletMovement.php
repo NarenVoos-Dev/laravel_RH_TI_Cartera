@@ -16,6 +16,7 @@ class WalletMovement extends Model
         'amount',
         'payment_date',
         'description',
+        'status',
     ];
 
     // Relación con la cartera

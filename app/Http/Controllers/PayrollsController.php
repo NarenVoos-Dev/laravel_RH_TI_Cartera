@@ -14,6 +14,10 @@ use App\Models\PayrollDetail;
 use App\Models\PayrollDetailItem;
 use App\Services\PayrollCalculator;
 
+//exportar excel
+use App\Exports\PayrollExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class PayrollsController extends Controller
 {
     public function index()
@@ -27,10 +31,10 @@ class PayrollsController extends Controller
         $companies = Company::all();
         return view('payrolls.create', compact('companies'));
     }
-
+    
     public function show($id)
     {
-        $payroll = \App\Models\Payroll::with([
+        $payroll = Payroll::with([
             'company',
             'details.employee'
         ])->findOrFail($id);
@@ -67,7 +71,7 @@ class PayrollsController extends Controller
         // 3. Procesar cada empleado con cálculo automático
         foreach ($empleadosActivos as $empleado) {
             // Calcular automáticamente valores por ley
-            $calculo = PayrollCalculator::calcularParaEmpleado($empleado, 15);
+            $calculo = PayrollCalculator::calcularParaEmpleado($empleado, 15, $request->start_date, $request->end_date);
     
             // Crear detalle de nómina
             $detail = PayrollDetail::create([
@@ -75,7 +79,7 @@ class PayrollsController extends Controller
                 'employee_id' => $empleado->id,
                 'base_salary' => $empleado->salary ?? 0,
                 'days_worked' => 15,
-                'transport_aid' => $empleado->transport_aid ?? 0,
+                'transport_aid' => 0,
                 'total_earnings' => $calculo['total_earnings'],
                 'total_deductions' => $calculo['total_deductions'],
                 'net_salary' => $calculo['net_salary'],
@@ -113,6 +117,20 @@ class PayrollsController extends Controller
 
     
         return view('payrolls.edit', compact('payroll', 'employees'));
+    }
+    //cerrar nómina
+    public function close(Payroll $payroll)
+    {
+        $payroll->update(['status' => 'cerrada']);
+
+        return redirect()->route('payrolls.show', $payroll->id)
+            ->with('success', 'Nómina cerrada correctamente. Ya no se pueden realizar modificaciones.');
+    }
+
+    //exportar a excel
+    public function exportExcel(Payroll $payroll)
+    {
+        return Excel::download(new PayrollExport($payroll), 'NOMINA_'.$payroll->company->name.'_'.now()->format('d-m-Y').'.xlsx');
     }
 
 

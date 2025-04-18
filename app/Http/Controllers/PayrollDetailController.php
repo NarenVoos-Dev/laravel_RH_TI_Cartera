@@ -13,25 +13,14 @@ use App\Models\PayrollDetail;
 use App\Services\PayrollCalculator;
 use App\Models\PayrollDetailItem;
 
+//Para exportar a pdf
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 class PayrollDetailController extends Controller
 {
    
-    public function index()
-    {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
-
-    public function store(Request $request)
-    {
-        //
-    }
-
+    //mostrar detalle de nómina
     public function show($id)
     {
         $detail = PayrollDetail::with([
@@ -43,23 +32,7 @@ class PayrollDetailController extends Controller
         return view('payrolls.payroll_details.show', compact('detail'));
     }
 
- 
-    public function edit(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
-    }
-
-        //recalcular dias trabajados
+    //recalcular dias trabajados
     public function updateDays(Request $request, PayrollDetail $payrollDetail)
     {
         $request->validate([
@@ -96,4 +69,13 @@ class PayrollDetailController extends Controller
         return redirect()->route('payroll_details.show', $payrollDetail->id)
             ->with('success', 'Días trabajados actualizados y valores recalculados.');
     }
+
+    //exportar a pdf
+    public function exportPdf(PayrollDetail $detail)
+    {
+        $pdf = Pdf::loadView('reportes.nomina.desprendibles.pdf', compact('detail'));
+        return $pdf->stream('colilla_' . $detail->employee->name . '.pdf');
+    }
+
+    
 }

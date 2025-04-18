@@ -29,6 +29,8 @@
 
         @include('partials.overlay')
     </div>
+
+    @include ('partials.loading')
     <!-- / Layout wrapper -->
     @include('partials.js')
     @stack('scripts')

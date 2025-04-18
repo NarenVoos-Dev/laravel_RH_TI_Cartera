@@ -3,14 +3,20 @@
 namespace App\Services;
 
 use App\Models\Employee;
+use App\Models\Wallet;
+use App\Models\WalletMovement;
 
 class PayrollCalculator
 {
     const SMMLV = 1423500; // Salario mínimo legal vigente 2025
     const AUXILIO_TRANSPORTE = 200000; //auxilio de transporte
 
-    public static function calcularParaEmpleado(Employee $employee, int $diasTrabajados = 15): array
+    public static function calcularParaEmpleado(Employee $employee, int $diasTrabajados = 15, $startDate = null, $endDate = null): array
     {
+        // Inicializar deducciones SIEMPRE desde el inicio
+        $deducciones = [];
+        $totalDeducciones = 0;
+
         // Cálculo salario proporcional
         $salarioMensual = $employee->salary ?? 0;
         $salarioDiario = $salarioMensual / 30;
@@ -18,14 +24,16 @@ class PayrollCalculator
 
         // Auxilio transporte (solo si salario mensual ≤ 2 SMMLV)
         $auxilio = 0;
+        $auxilioDevengado = 0;
         if ($salarioMensual <= (2 * self::SMMLV)) {
             $auxilio = $employee->transport_aid ?? self::AUXILIO_TRANSPORTE;
+            $auxilioDiario = $auxilio / 30;
+            $auxilioDevengado = round($auxilioDiario * $diasTrabajados, 0);
         }
 
-        // Deducciones
-        $deducciones = [];
-        $totalDeducciones = 0;
-
+        // =====================
+        // Deducciones legales
+        // =====================
         // Salud 4%
         $salud = round($salarioDevengado * 0.04, 0);
         $deducciones[] = [
@@ -64,9 +72,12 @@ class PayrollCalculator
             $totalDeducciones += $solidaridad + $subsistencia;
         }
 
+        // =====================
+        // DEVENGADOS
+        // =====================
         $devengados = [
             [
-                'name' => 'Salario proporcional',
+                'name' => 'Sueldo',
                 'type' => 'earning',
                 'amount' => $salarioDevengado,
             ],
@@ -76,11 +87,35 @@ class PayrollCalculator
             $devengados[] = [
                 'name' => 'Auxilio de transporte',
                 'type' => 'earning',
-                'amount' => $auxilio,
+                'amount' => $auxilioDevengado,
             ];
         }
 
-        $totalDevengado = $salarioDevengado + $auxilio;
+        // =====================
+        // MOVIMIENTOS DE CARTERA
+        // =====================
+        if ($startDate && $endDate) {
+            $wallets = Wallet::where('employee_id', $employee->id)->get();
+
+            foreach ($wallets as $wallet) {
+                $movimientos = WalletMovement::where('wallet_id', $wallet->id)
+                    ->whereBetween('payment_date', [$startDate, $endDate])
+                    ->where('status', 'descontar')
+                    ->get();
+
+                foreach ($movimientos as $mov) {
+                    $deducciones[] = [
+                        'name' => $mov->description ?? 'Descuento por cartera',
+                        'type' => 'deduction',
+                        'amount' => $mov->amount,
+                    ];
+
+                    $totalDeducciones += $mov->amount;
+                }
+            }
+        }
+
+        $totalDevengado = $salarioDevengado + $auxilioDevengado;
         $neto = $totalDevengado - $totalDeducciones;
 
         return [
@@ -91,4 +126,5 @@ class PayrollCalculator
             'net_salary' => $neto,
         ];
     }
+
 }

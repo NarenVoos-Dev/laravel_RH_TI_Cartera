@@ -16,6 +16,8 @@ use App\Http\Controllers\PayrollDetailController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\EarningController;
 use App\Http\Controllers\DeductionController;
+use App\Http\Controllers\PayrollDetailItemController;
+use App\Http\Controllers\DesprendibleController;
 
 
 
@@ -79,18 +81,38 @@ Route::middleware('auth')->group(function () {
         Route::get('reportes/carteras/pdf', [ReporteCarteraController::class, 'exportarPDF'])->name('reportes.carteras.pdf');
     //Nomina general 
     Route::resource('payrolls', PayrollsController::class);
-    //Ruta para configuracion
+    
+    //:::::: NOMINA::::::::::
+    // ::::::::::::::::::::::://
+    //Ruta para configuracion de nomina
     Route::view('/configuration', 'payrolls.configuration.index')->name('configuration.index');
-        //Conceptos devengados
-        Route::resource('earnings', EarningController::class);
-        //Conceptos de deducciones
-        Route::resource('deductions', DeductionController::class);
-        //conceptos de nomina por empleado
-        Route::resource('/payroll_details', PayrollDetailController::class);
-        //----Actualizar dias trabajados
-        Route::patch('/payroll_details/{payrollDetail}/update-days', [PayrollDetailController::class, 'updateDays'])->name('payroll_details.update_days');
+    //Conceptos devengados
+    Route::resource('earnings', EarningController::class);
+    //Conceptos de deducciones
+    Route::resource('deductions', DeductionController::class);
+    //conceptos de nomina por empleado
+    Route::resource('/payroll_details', PayrollDetailController::class);
+    //----Actualizar dias trabajados
+    Route::patch('/payroll_details/{payrollDetail}/update-days', [PayrollDetailController::class, 'updateDays'])->name('payroll_details.update_days');
+    //Rutas para agregar concepto manual
+    Route::post('/payroll-details/{detail}/items', [PayrollDetailItemController::class, 'store'])->name('payroll_detail_items.store');
+    //Eliminar concepto de la lista
+    Route::delete('/payroll-detail-items/{item}', [PayrollDetailItemController::class, 'destroy'])->name('payroll_detail_items.destroy');
+    //Cerrar nómina
+    Route::patch('/payrolls/{payroll}/cerrar', [PayrollsController::class, 'close'])->name('payrolls.close');
+    //Exportar a pdf colillas de nómina
+    Route::get('/payroll-detail/{detail}/pdf', [PayrollDetailController::class, 'exportPdf'])->name('payroll_details.export_pdf');
 
+        
+    //:::::: Desprendibles ::::::::::
+    // ::::::::::::::::::::::://
+    //Reportes de desprendibles para nomina
+    Route::get('/desprendibles', [DesprendibleController::class, 'index'])->middleware('auth')->name('desprendibles.index');
 
+    Route::get('/desprendibles/{detail}/pdf', [DesprendibleController::class, 'exportPdf'])
+        ->middleware('auth')->name('desprendibles.export_pdf');
+    //Exportar a excel
+    Route::get('/payrolls/{payroll}/export-excel', [PayrollsController::class, 'exportExcel'])->name('payrolls.export_excel');
 
 
 

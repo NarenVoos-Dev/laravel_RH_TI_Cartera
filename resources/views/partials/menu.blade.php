@@ -58,7 +58,7 @@
     <ul class="py-1 menu-inner">
         <!-- Dashboard -->
         <li class="menu-item ">
-            <a href="index.html" class="menu-link">
+            <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
                 <div>Dashboard</div>
             </a>
@@ -89,7 +89,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('desprendibles.index') }}" class="menu-link">
                         <i class="bx bx-file"></i>
                         <div>Desprendibles</div>
                     </a>
