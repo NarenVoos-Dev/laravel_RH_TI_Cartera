@@ -31,6 +31,15 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="companiaUsuario" class="form-label">Compañia</label>
+                        <select class="form-select" id="companiaUsuario" name="companiaUsuario" >
+                            <option value="">Seleccione una compañia</option>
+                            @foreach($companies as $company)
+                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="estadoUsuario" class="form-label">Estado</label>
                         <select class="form-select" id="estadoUsuario" name="estadoUsuario" required>
                             <option value="active">Activo</option>

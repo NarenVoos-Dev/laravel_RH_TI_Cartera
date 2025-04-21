@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Spatie\Permission\Models\Role;
 
 
 class UserSeeder extends Seeder
@@ -16,16 +16,22 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear usuario administrador por defecto
-        User::create([
+        // Asegúrate de que el rol exista
+        $adminRole = Role::firstOrCreate([
+            'name' => 'administrador',
+            'guard_name' => 'web'
+        ]);
+
+        // Crear usuario administrador
+        $user = User::create([
             'name' => 'Administrador',
             'username' => 'admin',
             'password' => Hash::make('admin123'),
-            'role_id' => 1, // Asegúrate de que el rol con ID 1 exista
-            'status' => 1,
+            'role_id' => $adminRole->id, // Este es solo visual si lo usas
+            'status' => 'active',
         ]);
 
-        // Generar usuarios de prueba con el factory
-        User::factory(10)->create();
+        // 👉 Asignar el rol con Spatie
+        $user->assignRole('administrador');
     }
 }

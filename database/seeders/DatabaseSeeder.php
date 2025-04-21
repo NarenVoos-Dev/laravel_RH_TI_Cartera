@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 
 
+
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -20,12 +22,17 @@ class DatabaseSeeder extends Seeder
            // 'name' => 'Test User',
             //'email' => 'test@example.com',
         //]);
-
+        //Crear roles y permisos
         //$this->call(RoleSeeder::class);
+        //$this->call([ RolesAndPermissionsSeeder::class,]);
+        // Crear usuarios solo admin
         //$this->call(UserSeeder::class);
         //$this->call(CompanySeeder::class);
 
-        //    
-        $this->call([EarningSeeder::class, DeductionSeeder::class,]);
+        // deduciones y devengados basicos    
+        //$this->call([EarningSeeder::class, DeductionSeeder::class,]);
+        
+        //crear permisos nuevos 
+        //$this->call([PermissionSeeder::class,]);
     }
 }

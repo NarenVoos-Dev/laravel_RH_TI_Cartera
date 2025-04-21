@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 
 class RoleController extends Controller
 {
@@ -11,7 +13,8 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-        return view('roles.index', compact('roles'));
+        $permissions = Permission::all();
+        return view('roles.index', compact('roles', 'permissions'));
     }
 
 
@@ -71,4 +74,23 @@ class RoleController extends Controller
         $role->delete();
         return response()->json(['success' => true]);
     }
+
+    public function editPermissions(Role $role)
+    {
+        $permissions = Permission::all();
+        return view('roles.permisosRole', compact('role', 'permissions'));
+    }
+
+    public function updatePermissions(Request $request, Role $role)
+    {
+        $request->validate([
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,name',
+        ]);
+    
+        $role->syncPermissions($request->permissions ?? []);
+    
+        return redirect()->route('roles.index')->with('success', 'Permisos actualizados correctamente.');
+    }
+    
 }

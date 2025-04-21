@@ -5,9 +5,11 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Lista de Compañias</h5>
+        @can('crear companías')
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
             <i class="bx bx-plus"></i> Nueva Compañia
         </button>
+        @endcan
     </div>
 </div>
 <div class="p-4 mt-4 card">
@@ -38,11 +40,13 @@
                         </span>
                     </td>
                     <td>
+                        @can('editar companías')
                         <button class="btn btn-sm btn-light editCompanyBtn" data-id="{{ $company->id }}"
                             data-bs-target="#editCompanyModal" data-bs-placement="top" data-bs-toggle="tooltip"
                             title="Editar">
                             <i class="bx bx-edit-alt text-warning"></i>
                         </button>
+                        @endcan
                         <button class="btn btn-sm btn-light btn-delete" data-id="{{ $company->id }}"
                             data-bs-placement="top" data-bs-toggle="tooltip" title="Eliminar">
                             <i class="bx bx-trash-alt text-danger"></i>

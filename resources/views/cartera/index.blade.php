@@ -6,6 +6,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Lista de Carteras</h5>
+        @can('crear cartera')
         <div>
             <a href="{{ route('reportes.carteras.index') }}" class="btn btn-outline-dark me-2">
                 <i class="bx bx-bar-chart-alt"></i> Reportes de movimientos
@@ -15,9 +16,11 @@
                 <i class="bx bx-plus"></i> Nueva Cartera
             </button>
         </div>
+        @endcan
     </div>
 </div>
 
+@can('ver cartera')
 <div class="p-4 mt-4 card">
     <div class="table-responsive text-nowrap">
         <table id="carterasTable" class="table align-middle table-hover table-bordered">
@@ -40,23 +43,21 @@
                     <td class="text-center">{{ \Carbon\Carbon::parse($cartera->issue_date)->format('d/m/Y') }}</td>
                     <td class="text-center">
                         <span class="badge {{ $cartera->balance > 0 ? 'bg-danger' : 'bg-success' }}">
-                           $  {{ number_format($cartera->balance, 0, ',', '.') }} <small>COP</small>
+                            $ {{ number_format($cartera->balance, 0, ',', '.') }} <small>COP</small>
                         </span>
                     </td>
 
                     <td class="text-center">
-                    <button class="btn btn-sm btn-light abonarBtn"
-                        data-id="{{ $cartera->id }}"
-                        data-bs-toggle="modal"
-                        data-bs-target="#abonarModal"
-                        title="Abonar"
-                        data-bs-placement="top">
-                        <i class="bx bx-wallet text-success"></i>
-                    </button>
+                        <button class="btn btn-sm btn-light abonarBtn" data-id="{{ $cartera->id }}"
+                            data-bs-toggle="modal" data-bs-target="#abonarModal" title="Abonar" data-bs-placement="top">
+                            <i class="bx bx-wallet text-success"></i>
+                        </button>
 
-                    <button class="btn btn-sm btn-light verHistorialBtn" data-id="{{ $cartera->id }}" data-bs-toggle="modal" data-bs-target="#historialModal" title="Historial" data-bs-toggle="tooltip">
-                        <i class="bx bx-time text-info"></i>
-                    </button>
+                        <button class="btn btn-sm btn-light verHistorialBtn" data-id="{{ $cartera->id }}"
+                            data-bs-toggle="modal" data-bs-target="#historialModal" title="Historial"
+                            data-bs-toggle="tooltip">
+                            <i class="bx bx-time text-info"></i>
+                        </button>
                     </td>
                 </tr>
                 @endforeach
@@ -65,6 +66,7 @@
 
     </div>
 </div>
+@endcan
 
 @include('cartera.modalCreate')
 @include('cartera.modalEdit')
@@ -98,7 +100,7 @@ $(document).ready(function() {
 
     //etiquetas de los botones de acción
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
+    tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 
@@ -109,7 +111,7 @@ $(document).ready(function() {
         dropdownParent: $('#createCarteraForm')
     });
 
-    
+
     //crear cartera
     $('#createCarteraForm').on('submit', function(e) {
         e.preventDefault();
@@ -121,7 +123,7 @@ $(document).ready(function() {
             total_amount: $('#total_amount').val(),
         };
 
-       
+
 
         $.ajax({
             url: '/cartera',
@@ -132,35 +134,71 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function() {
+                $('#createCarteraModal').modal('hide');
                 Swal.fire('¡Cartera registrada!', '', 'success').then(() => location
-                .reload());
+                    .reload());
             },
             error: function(xhr) {
-                if (xhr.status === 422) {
-                    let errores = xhr.responseJSON.errors;
-                    let msg = Object.values(errores).flat().join('\n');
-                    Swal.fire('Errores de validación', msg, 'warning');
-                } else {
-                    Swal.fire('Error', 'No se pudo registrar la cartera.', 'error');
+                $('#createCarteraModal').modal('hide');
+                let mensaje = 'Error inesperado';
+
+                try {
+                    const response = JSON.parse(xhr.responseText);
+
+                    if (response.errors) {
+                        const errores = Object.values(response.errors).flat();
+                        mensaje = errores[0];
+
+                        switch (mensaje) {
+                            case 'El campo employee_id es obligatorio.':
+                                Swal.fire('Falta empleado',
+                                    'Debes seleccionar un empleado.', 'warning');
+                                break;
+                            case 'El campo company_id es obligatorio.':
+                                Swal.fire('Falta compañía',
+                                    'Debes seleccionar una compañía.', 'warning');
+                                break;
+                            case 'El campo issue_date es obligatorio.':
+                                Swal.fire('Falta fecha',
+                                    'Debes seleccionar la fecha de emisión.', 'warning');
+                                break;
+                            case 'El campo total_amount es obligatorio.':
+                                Swal.fire('Falta monto',
+                                    'Ingresa el valor total de la cartera.', 'warning');
+                                break;
+                            default:
+                                Swal.fire('Error', mensaje, 'error');
+                                break;
+                        }
+                    } else if (response.message) {
+                        mensaje = response.message;
+                        Swal.fire('Error', mensaje, 'error');
+                    }
+                } catch (e) {
+                    Swal.fire('Error', 'No se pudo procesar la respuesta del servidor.',
+                        'error');
+                    console.error('Error inesperado:', e);
                 }
             }
+
+
         });
     });
 
     // Establecer wallet_id al abrir el modal
-    $('.abonarBtn').on('click', function () {
+    $('.abonarBtn').on('click', function() {
         let walletId = $(this).data('id');
         $('#wallet_id').val(walletId);
-        
+
     });
 
     //crear abono
-    $('#formAbonarCartera').on('submit', function (e) {
+    $('#formAbonarCartera').on('submit', function(e) {
         e.preventDefault();
-        
+
         let walletId = $('#wallet_id').val();
         let url = `/cartera/${walletId}/movements`;
-        
+
         let formData = {
             wallet_id: walletId,
             payment_date: $('#payment_date').val(),
@@ -177,13 +215,15 @@ $(document).ready(function() {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            success: function (response) {
+            success: function(response) {
                 $('#abonarModal').modal('hide');
-                Swal.fire('¡Abono registrado!', response.message, 'success').then(() => { 
-                    location.reload(); // Puedes reemplazar por actualizar solo la tabla
-                });
+                Swal.fire('¡Abono registrado!', response.message, 'success').then(
+                    () => {
+                        location
+                            .reload(); // Puedes reemplazar por actualizar solo la tabla
+                    });
             },
-            error: function (xhr) {
+            error: function(xhr) {
                 $('#abonarModal').modal('hide');
                 console.log('Error:', xhr);
                 if (xhr.status === 422 && xhr.responseJSON?.errors) {
@@ -197,17 +237,18 @@ $(document).ready(function() {
             }
         });
     });
-
-    $('.verHistorialBtn').on('click', function () {
+    // Ver historial de movimientos
+    $('.verHistorialBtn').on('click', function() {
         let walletId = $(this).data('id');
 
         $.ajax({
             url: `/cartera/${walletId}/movements`,
             type: 'GET',
-            success: function (response) {
+            success: function(response) {
                 if (response.success) {
                     $('#nombreEmpleado').text(response.employee);
-                    $('#saldoInicial').text(response.total_amount.toLocaleString('es-CO'));
+                    $('#saldoInicial').text(response.total_amount.toLocaleString(
+                        'es-CO'));
                     $('#saldoActual').text(response.balance.toLocaleString('es-CO'));
 
                     let rows = '';
@@ -225,8 +266,9 @@ $(document).ready(function() {
                     Swal.fire('Error', 'No se pudo obtener el historial.', 'error');
                 }
             },
-            error: function () {
-                Swal.fire('Error', 'Error de servidor al cargar el historial.', 'error');
+            error: function() {
+                Swal.fire('Error', 'Error de servidor al cargar el historial.',
+                    'error');
             }
         });
     });

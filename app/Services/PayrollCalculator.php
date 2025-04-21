@@ -95,7 +95,7 @@ class PayrollCalculator
         // MOVIMIENTOS DE CARTERA
         // =====================
         if ($startDate && $endDate) {
-            $wallets = Wallet::where('employee_id', $employee->id)->get();
+            $wallets = \App\Models\Wallet::where('employee_id', $employee->id)->get();
 
             foreach ($wallets as $wallet) {
                 $movimientos = WalletMovement::where('wallet_id', $wallet->id)

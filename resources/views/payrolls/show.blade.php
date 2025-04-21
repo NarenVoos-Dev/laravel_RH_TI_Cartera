@@ -9,9 +9,11 @@
                 <form action="{{ route('payrolls.close', $payroll->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de cerrar esta nómina? Esta acción no se puede deshacer.');">
                     @csrf
                     @method('PATCH')
+                    @can('cerrar nomina')
                     <button class="btn btn-danger" title="Cerrar nómina">
                         <i class="bx bx-lock"></i> Cerrar Nómina
                     </button>
+                    @endcan
                 </form>
             @endif
 

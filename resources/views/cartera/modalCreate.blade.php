@@ -11,7 +11,7 @@
                     @csrf
                     <div class="mb-3">
                         <label for="employee_id" class="form-label">Empleado</label>
-                        <select id="employee_id" class="form-select" name="employee_id" required>
+                        <select id="employee_id" class="form-select select2" name="employee_id" required>
                             <option value="">Seleccione...</option>
                             @foreach ($employees as $employee)
                             <option value="{{ $employee->id }}">{{ $employee->name }}</option>

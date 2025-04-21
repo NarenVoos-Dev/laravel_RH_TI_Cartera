@@ -33,7 +33,7 @@ class LoginRequest extends FormRequest
     }
 
 
-    public function authenticate(): void
+   /* public function authenticate(): void
     {
         $credentials = $this->only('username', 'password');
     
@@ -44,7 +44,28 @@ class LoginRequest extends FormRequest
         }
     
         session()->regenerate();
+    }*/
+
+    public function authenticate(): void
+    {
+        $this->ensureIsNotRateLimited();
+
+        // 👇 Agregamos la condición de status
+        if (! Auth::attempt([
+            'username' => $this->input('username'),
+            'password' => $this->input('password'),
+            'status' => 'active', // solo permite si el usuario está activo
+        ], $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'username' => __('Estas credenciales no coinciden con nuestros registros o el usuario está inactivo.'),
+            ]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
     }
+
     
 
     /**

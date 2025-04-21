@@ -4,6 +4,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Historial de Nóminas</h5>
+        
         <a href="{{ route('payrolls.create') }}" class="btn btn-primary">
             <i class="bx bx-plus"></i> Crear nueva nómina
         </a>

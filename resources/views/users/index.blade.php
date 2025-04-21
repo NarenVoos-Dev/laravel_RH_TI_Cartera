@@ -6,9 +6,11 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Lista de Usuarios</h5>
+        @can('crear usuarios')
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
             <i class="bx bx-plus"></i> Nuevo Usuario
         </button>
+        @endcan
     </div>
 </div>
 <div class="p-4 mt-4 card">
@@ -20,6 +22,7 @@
                     <th>Nombre</th>
                     <th>Usuario</th>
                     <th>Rol</th>
+                    <th>Compañía</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
@@ -30,7 +33,10 @@
                     <td>{{ $user->id }}</td>
                     <td class="text-center">{{ $user->name }}</td>
                     <td class="text-center">{{ $user->username }}</td>
-                    <td class="text-center">{{ $user->role->name ?? 'Sin Rol' }}</td>
+                    <td class="text-center">
+                        {{ $user->roles->pluck('name')->first() ?? 'Sin Rol' }}
+                    </td>
+                    <td class="text-center">{{ $user->company->name ?? 'Sin Compañía' }}</td>
                     <td class="text-center">
                         <span class="badge bg-{{ $user->status == 'active' ? 'success' : 'danger' }}">
                             {{ ucfirst($user->status) }}
@@ -99,50 +105,52 @@ document.getElementById("createUserForm").addEventListener("submit", function(ev
     let password = document.getElementById("password").value;
     let rolUsuario = document.getElementById("rolUsuario").value;
     let estadoUsuario = document.getElementById("estadoUsuario").value;
+    let companiaUsuario = document.getElementById("companiaUsuario").value;
 
     console.log(nombreUsuario, username, password, rolUsuario, estadoUsuario);
     fetch('/users', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({
-            name: nombreUsuario,
-            username: username,
-            password: password,
-            role_id: rolUsuario,
-            status: estadoUsuario
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                name: nombreUsuario,
+                username: username,
+                password: password,
+                role_id: rolUsuario,
+                company_id: companiaUsuario,
+                status: estadoUsuario
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        $('#createUserModal').modal('hide'); // Ocultar el modal
-        Swal.fire({
-            title: "¡Usuario Creado!",
-            text: "El usuario ha sido creado exitosamente.",
-            icon: "success",
-            confirmButtonText: "OK"
-        }).then(() => {
-            location.reload(); // Recargar la tabla para ver el nuevo usuario
+        .then(response => response.json())
+        .then(data => {
+            $('#createUserModal').modal('hide'); // Ocultar el modal
+            Swal.fire({
+                title: "¡Usuario Creado!",
+                text: "El usuario ha sido creado exitosamente.",
+                icon: "success",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload(); // Recargar la tabla para ver el nuevo usuario
+            });
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Hubo un problema al crear el usuario.",
+                icon: "error",
+                confirmButtonText: "Cerrar"
+            });
         });
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        Swal.fire({
-            title: "Error",
-            text: "Hubo un problema al crear el usuario.",
-            icon: "error",
-            confirmButtonText: "Cerrar"
-        });
-    });
 });
 
 
 
 //Abrir el modal de edición de usuario
 $(document).on('click', '.editUserBtn', function() {
-    
+
     var userId = $(this).data('id');
     $('#editUserModal').modal('show'); // Ocultar el modal
 
@@ -157,6 +165,7 @@ $(document).on('click', '.editUserBtn', function() {
             $('#editUsername').val(response.username);
             $('#editPassword').val(''); // Dejamos la contraseña vacía para que no se muestre
             $('#editRole').val(response.role_id);
+            $('#editCompaniaUsuario').val(response.company_id);
             $('#editStatus').val(response.status);
             $('#editUserModal').modal('show');
         },
@@ -175,8 +184,10 @@ document.getElementById("editUserForm").addEventListener("submit", function(even
     let userId = document.getElementById("editUserId").value; // Obtener el ID del usuario
     let userName = document.getElementById("editUserName").value;
     let username = document.getElementById("editUsername").value;
-    let password = document.getElementById("editPassword").value; // La contraseña se enviará vacía si no se cambia
+    let password = document.getElementById("editPassword")
+    .value; // La contraseña se enviará vacía si no se cambia
     let role = document.getElementById("editRole").value;
+    let company = document.getElementById("editCompaniaUsuario").value;
     let status = document.getElementById("editStatus").value;
 
     // Si la contraseña está vacía, no la enviamos
@@ -184,6 +195,7 @@ document.getElementById("editUserForm").addEventListener("submit", function(even
         name: userName,
         username: username,
         role_id: role,
+        company_id: company,
         status: status
     };
 
@@ -195,34 +207,34 @@ document.getElementById("editUserForm").addEventListener("submit", function(even
     console.log(bodyData);
 
     fetch('/users/' + userId, {
-        method: 'PUT', // Método PUT para actualizar
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify(bodyData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        $('#editUserModal').modal('hide'); // Ocultar el modal
-        Swal.fire({
-            title: "¡Usuario Actualizado!",
-            text: "El usuario ha sido actualizado exitosamente.",
-            icon: "success",
-            confirmButtonText: "OK"
-        }).then(() => {
-            location.reload(); // Recargar la tabla para ver el usuario actualizado
+            method: 'PUT', // Método PUT para actualizar
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify(bodyData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            $('#editUserModal').modal('hide'); // Ocultar el modal
+            Swal.fire({
+                title: "¡Usuario Actualizado!",
+                text: "El usuario ha sido actualizado exitosamente.",
+                icon: "success",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload(); // Recargar la tabla para ver el usuario actualizado
+            });
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Hubo un problema al actualizar el usuario.",
+                icon: "error",
+                confirmButtonText: "Cerrar"
+            });
         });
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        Swal.fire({
-            title: "Error",
-            text: "Hubo un problema al actualizar el usuario.",
-            icon: "error",
-            confirmButtonText: "Cerrar"
-        });
-    });
 });
 
 
@@ -256,7 +268,6 @@ function deactivateUser(userId) {
         }
     });
 }
-
 </script>
 
 

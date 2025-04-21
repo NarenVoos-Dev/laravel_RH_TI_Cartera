@@ -9,7 +9,7 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="flex-grow-1">
-            <span class="fw-semibold d-block">{{ Auth::user()->name }} - {{ Auth::user()->role->name }}</span>
+            <span class="fw-semibold d-block">{{ Auth::user()->name }} - {{ auth()->user()->getRoleNames()->join(', ') }}</span>
         </div>
         <ul class="flex-row navbar-nav align-items-center ms-auto">
             <!-- User -->
@@ -32,7 +32,7 @@
                           </div>
                           <div class="flex-grow-1">
                             <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
-                            <small class="text-muted">{{ Auth::user()->role->name }}</small>
+                            <small class="text-muted">{{ auth()->user()->getRoleNames()->join(', ') }}</small>
                           </div>
                         </div>
                       </a>

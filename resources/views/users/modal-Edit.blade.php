@@ -33,6 +33,15 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="editCompaniaUsuario" class="form-label">Compañia</label>
+                        <select class="form-select" id="editCompaniaUsuario" name="editCompaniaUsuario" >
+                            <option value="">Seleccione una compañia</option>
+                            @foreach($companies as $company)
+                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="editStatus" class="form-label">Estado</label>
                         <select class="form-select" id="editStatus" name="status" required>
                             <option value="active">Activo</option>

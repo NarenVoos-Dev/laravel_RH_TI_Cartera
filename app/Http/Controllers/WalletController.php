@@ -6,27 +6,25 @@ use Illuminate\Http\Request;
 use App\Models\Wallet;
 use App\Models\Employee;
 use App\Models\Company;
+use App\Models\EmployeeCompany;
+use App\Models\CompanyWallet;
 
 use App\Models\WalletMovement;
 
 class WalletController extends Controller
 {
-    
+    // Mostrar listado de carteras
     public function index()
     {
-        $carteras = Wallet::all();
+        $carteras = Wallet::visible()->get(); // 🔥 Aquí usamos el scope
         $employees = Employee::all();
         $companies = Company::all();
+    
         return view('cartera.index', compact('carteras', 'employees', 'companies'));
     }
        
 
-    public function create()
-    {
-        //
-    }
-
-
+    // Crear cartera
     public function store(Request $request)
     {
         $request->validate([
@@ -51,12 +49,19 @@ class WalletController extends Controller
     
             $wallet = Wallet::create([
                 'employee_id' => $employee->id,
-                'company_id' => $company_id,
+                'company_id' => $company_id, //referencia historica
                 'issue_date' => $request->issue_date,
                 'concept' => $request->concept,
                 'total_amount' => $request->total_amount,
                 'balance' => $request->balance ?? $request->total_amount,
             ]);
+
+            $company_id_user = auth()->user()->company_id;
+
+            // Asociar la empresa que originó la cartera (tabla pivote)
+            if (!$wallet->companies()->where('company_id', $company_id_user)->exists()) {
+                $wallet->companies()->attach($company_id_user);
+            }
     
             return response()->json([
                 'success' => true,
@@ -72,38 +77,6 @@ class WalletController extends Controller
         }
     }
     
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
     //crear abono
     public function createMovement(Request $request , string $id)   
     {

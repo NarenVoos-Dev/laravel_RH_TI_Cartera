@@ -32,6 +32,11 @@ class Company extends Model
                     ->withPivot('assigned_at', 'removed_at')
                     ->withTimestamps();
     }
+
+    public function wallets()
+    {
+        return $this->belongsToMany(Wallet::class, 'company_wallet');
+    }
     
 
 }
