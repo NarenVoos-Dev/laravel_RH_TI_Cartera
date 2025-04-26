@@ -28,7 +28,9 @@
                 <tr>
                     <th>#</th>
                     <th>Empleado</th>
-                    <th>Compañía</th>
+                    <th>Compañía del empleado</th>
+                    <th>Compañía de la cartera</th>
+                    <th>Concepto</th>
                     <th>Fecha de Cartera</th>
                     <th>Saldo</th>
                     <th>Acciones</th>
@@ -39,8 +41,10 @@
                 <tr>
                     <td class="text-center">{{ $cartera->id }}</td>
                     <td class="text-center">{{ $cartera->employee->name }}</td>
-                    <td class="text-center">{{ $cartera->company->name }}</td>
+                    <td class="text-center">{{ $cartera->company->name ?? 'Sin Empresa' }}</td>
+                    <td class="text-center">{{ $cartera->companies->pluck('name')->first() ?? 'Sin Empresa' }}</td>
                     <td class="text-center">{{ \Carbon\Carbon::parse($cartera->issue_date)->format('d/m/Y') }}</td>
+                    <td class="text-center">{{ $cartera->concept }}</td>
                     <td class="text-center">
                         <span class="badge {{ $cartera->balance > 0 ? 'bg-danger' : 'bg-success' }}">
                             $ {{ number_format($cartera->balance, 0, ',', '.') }} <small>COP</small>
@@ -48,11 +52,12 @@
                     </td>
 
                     <td class="text-center">
+                        @can('crear abonos')
                         <button class="btn btn-sm btn-light abonarBtn" data-id="{{ $cartera->id }}"
                             data-bs-toggle="modal" data-bs-target="#abonarModal" title="Abonar" data-bs-placement="top">
                             <i class="bx bx-wallet text-success"></i>
                         </button>
-
+                        @endcan
                         <button class="btn btn-sm btn-light verHistorialBtn" data-id="{{ $cartera->id }}"
                             data-bs-toggle="modal" data-bs-target="#historialModal" title="Historial"
                             data-bs-toggle="tooltip">

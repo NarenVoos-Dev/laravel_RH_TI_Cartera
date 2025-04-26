@@ -28,7 +28,7 @@ class PayrollsController extends Controller
     }
     public function create()
     {
-        $companies = Company::all();
+        $companies = Company::all()->where('type', 'interna');
         return view('payrolls.create', compact('companies'));
     }
     

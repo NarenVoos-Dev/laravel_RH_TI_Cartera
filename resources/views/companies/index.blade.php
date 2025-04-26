@@ -20,6 +20,7 @@
                     <th>#</th>
                     <th>Nombre</th>
                     <th>NIT</th>
+                    <th>Tipo</th>
                     <th>Teléfono</th>
                     <th>Email</th>
                     <th>Estado</th>
@@ -32,6 +33,7 @@
                     <td>{{ $company->id }}</td>
                     <td class="text-center">{{ $company->name }}</td>
                     <td class="text-center">{{ $company->nit }}</td>
+                    <td class="text-center">{{ ucfirst($company->type) }}</td>
                     <td class="text-center">{{ $company->phone }}</td>
                     <td class="text-center">{{ $company->email }}</td>
                     <td class="text-center">
@@ -107,6 +109,7 @@ $(document).ready(function() {
         formData.append('address', $("#direccionEmpresa").val());
         formData.append('phone', $("#telefonoEmpresa").val());
         formData.append('email', $("#emailEmpresa").val());
+        formData.append('type', $("#tipoEmpresa").val());
         formData.append('status', $("#estadoEmpresa").val());
         formData.append('_token', $('meta[name="csrf-token"]').attr("content"));
 
@@ -149,6 +152,7 @@ $(document).ready(function() {
             type: "GET",
             dataType: "json",
             success: function(response) {
+                console.log(response);
 
                 // Llenar el formulario del modal con los datos recibidos
                 $('#editCompanyId').val(response.id);
@@ -157,8 +161,9 @@ $(document).ready(function() {
                 $('#editDireccionEmpresa').val(response.address);
                 $('#editTelefonoEmpresa').val(response.phone);
                 $('#editCorreoEmpresa').val(response.email);
+                $('#editTipoEmpresa').val(response.type);
                 $('#editEstadoEmpresa').val(response.status); // 'active' o 'inactive'
-
+           // 'interna' o 'externa'
                 $('#editCompanyModal').modal('show');
             },
             error: function(xhr, status, error) {
@@ -180,7 +185,8 @@ $(document).ready(function() {
             address: $("#editDireccionEmpresa").val(),
             phone: $("#editTelefonoEmpresa").val(),
             email: $("#editCorreoEmpresa").val(),
-            status: $("#editEstadoEmpresa").val()
+            status: $("#editEstadoEmpresa").val(),
+            type: $("#editTipoEmpresa").val()
         };
 
         $.ajax({

@@ -16,6 +16,7 @@ class Company extends Model
         'address',
         'phone',
         'email',
+        'type',
         'status',
     ];
 

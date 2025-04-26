@@ -9,9 +9,11 @@
             <li class="nav-item">
                 <a class="nav-link active" id="accesos-tab" data-bs-toggle="tab" href="#accesos" role="tab">Accesos directos</a>
             </li>
+            @can('ver indicadores')
             <li class="nav-item">
                 <a class="nav-link" id="indicadores-tab" data-bs-toggle="tab" href="#indicadores" role="tab">Indicadores</a>
             </li>
+            @endcan
         </ul>
     </div>
 
@@ -112,9 +114,11 @@
         </div>
 
         {{-- INDICADORES --}}
+        @can('ver indicadores')
         <div class="tab-pane fade" id="indicadores" role="tabpanel">
             <p class="text-muted">Aquí irán los gráficos y estadísticas más adelante.</p>
         </div>
+        @endcan
 
     </div>
 </div>

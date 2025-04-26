@@ -19,8 +19,9 @@ class WalletController extends Controller
         $carteras = Wallet::visible()->get(); // 🔥 Aquí usamos el scope
         $employees = Employee::all();
         $companies = Company::all();
+        $companieWallets = CompanyWallet::all();
     
-        return view('cartera.index', compact('carteras', 'employees', 'companies'));
+        return view('cartera.index', compact('carteras', 'employees', 'companies', 'companieWallets'));
     }
        
 

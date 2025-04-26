@@ -9,7 +9,7 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="flex-grow-1">
-            <span class="fw-semibold d-block">{{ Auth::user()->name }} - {{ auth()->user()->getRoleNames()->join(', ') }}</span>
+            <span class="fw-semibold d-block">{{ Auth::user()->name }} - {{ Auth::user()->company->name ?? 'Super Administrador' }}</span>
         </div>
         <ul class="flex-row navbar-nav align-items-center ms-auto">
             <!-- User -->

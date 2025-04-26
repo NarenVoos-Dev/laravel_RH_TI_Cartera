@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\WalletMovement;
 
 
+
 class Wallet extends Model
 {
     use HasFactory;
@@ -49,7 +50,7 @@ class Wallet extends Model
         $user = auth()->user();
     
         // Empleado → ve solo sus carteras
-        if ($user->hasRole('empleado') && $user->employee) {
+        if ($user->hasRole('empleados') && $user->employee) {
             return $query->where('employee_id', $user->employee->id);
         }
     

@@ -29,6 +29,7 @@ class CompanyController extends Controller
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
+            'type' => 'required|in:externa,interna',
             'status' => 'required|in:active,inactive',
         ]);
     
@@ -76,6 +77,7 @@ class CompanyController extends Controller
             'nit' => 'required|string|max:50|unique:companies,nit,' . $id,            'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
+            'type' => 'required|in:externa,interna',
             'status' => 'required',
         ]);
 
@@ -94,6 +96,7 @@ class CompanyController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'status' => $request->status,
+            'type' => $request->type,
         ]);
 
         // 3. Retornar respuesta exitosa

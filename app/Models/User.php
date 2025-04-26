@@ -57,5 +57,9 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    public function isEmployee(): bool
+    {
+        return $this->hasRole('empleados'); // Asegúrate que el nombre sea exactamente como tu rol
+    }
 
 }

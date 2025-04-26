@@ -30,6 +30,13 @@
                         <input type="email" class="form-control" id="emailEmpresa" name="emailEmpresa">
                     </div>
                     <div class="mb-3">
+                        <label for="tipoEmpresa" class="form-label">Tipo</label>
+                        <select class="form-select" id="tipoEmpresa" name="tipoEmpresa" required>
+                            <option value="interna">Interna</option>
+                            <option value="externa">Externa</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="estadoEmpresa" class="form-label">Estado</label>
                         <select class="form-select" id="estadoEmpresa" name="estadoEmpresa" required>
                             <option value="active">Activo</option>

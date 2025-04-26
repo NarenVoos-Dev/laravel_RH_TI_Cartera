@@ -26,6 +26,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::redirect('/','/dashboard')->name('home');
+
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
 Route::middleware(['auth'])->group(function () {

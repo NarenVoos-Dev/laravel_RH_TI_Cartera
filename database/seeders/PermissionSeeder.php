@@ -19,6 +19,7 @@ class PermissionSeeder extends Seeder
             'ver nomina',
             'crear nomina',
             'cerrar nomina',
+            'crear abonos',
             //'confirmar nomina',
 
             // Módulo Desprendibles
@@ -46,6 +47,9 @@ class PermissionSeeder extends Seeder
 
             // Módulo Reportes
             'ver reportes',
+
+            //Dashboard
+            'ver indicadores',
 
             // IT / Soporte
             'ver tickets',

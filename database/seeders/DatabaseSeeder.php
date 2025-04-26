@@ -33,6 +33,6 @@ class DatabaseSeeder extends Seeder
         //$this->call([EarningSeeder::class, DeductionSeeder::class,]);
         
         //crear permisos nuevos 
-        //$this->call([PermissionSeeder::class,]);
+        $this->call([PermissionSeeder::class,]);
     }
 }

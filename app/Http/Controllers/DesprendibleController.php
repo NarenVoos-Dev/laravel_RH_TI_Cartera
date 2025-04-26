@@ -16,11 +16,12 @@ class DesprendibleController extends Controller
         $user = auth()->user();
 
         // Si es empleado, solo sus colillas
-        if ($user->role === 'empleado') {
-            $payrollDetails = PayrollDetail::with('payroll')
-                ->whereHas('employee', function ($q) use ($user) {
-                    $q->where('user_id', $user->id);
-                })->latest()->get();
+        if ($user->isEmployee() && $user->employee) {
+            $payrollDetails = PayrollDetail::where(
+                'employee_id', $user->employee->id)
+                ->with('payroll.company', 'employee')
+                ->latest()
+                ->get();
         } else {
             // Si es admin u otro rol, ver todos
             $payrollDetails = PayrollDetail::with(['payroll', 'employee'])
