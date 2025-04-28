@@ -41,8 +41,11 @@ class PayrollDetailController extends Controller
 
         $employee = $payrollDetail->employee;
 
+        $startDate = $payrollDetail->payroll->start_date;
+        $endDate = $payrollDetail->payroll->end_date;
+
         // Recalcular con nuevos días
-        $calculo = PayrollCalculator::calcularParaEmpleado($employee, $request->days_worked);
+        $calculo = PayrollCalculator::calcularParaEmpleado($employee, $request->days_worked, $startDate, $endDate);
 
         // 1. Actualizar el detalle
         $payrollDetail->update([

@@ -95,7 +95,7 @@ class PayrollCalculator
         // MOVIMIENTOS DE CARTERA
         // =====================
         if ($startDate && $endDate) {
-            $wallets = \App\Models\Wallet::where('employee_id', $employee->id)->get();
+            $wallets = Wallet::where('employee_id', $employee->id)->get();
 
             foreach ($wallets as $wallet) {
                 $movimientos = WalletMovement::where('wallet_id', $wallet->id)
@@ -111,8 +111,11 @@ class PayrollCalculator
                     ];
 
                     $totalDeducciones += $mov->amount;
+                    
                 }
+                
             }
+            
         }
 
         $totalDevengado = $salarioDevengado + $auxilioDevengado;

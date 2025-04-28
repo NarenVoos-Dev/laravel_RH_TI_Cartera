@@ -30,7 +30,7 @@
                     <th>Empleado</th>
                     <th>Compañía del empleado</th>
                     <th>Compañía de la cartera</th>
-                    <th>Concepto</th>
+                    <th>Concepto de cartera</th>
                     <th>Fecha de Cartera</th>
                     <th>Saldo</th>
                     <th>Acciones</th>
@@ -43,8 +43,8 @@
                     <td class="text-center">{{ $cartera->employee->name }}</td>
                     <td class="text-center">{{ $cartera->company->name ?? 'Sin Empresa' }}</td>
                     <td class="text-center">{{ $cartera->companies->pluck('name')->first() ?? 'Sin Empresa' }}</td>
-                    <td class="text-center">{{ \Carbon\Carbon::parse($cartera->issue_date)->format('d/m/Y') }}</td>
                     <td class="text-center">{{ $cartera->concept }}</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($cartera->issue_date)->format('d/m/Y') }}</td>
                     <td class="text-center">
                         <span class="badge {{ $cartera->balance > 0 ? 'bg-danger' : 'bg-success' }}">
                             $ {{ number_format($cartera->balance, 0, ',', '.') }} <small>COP</small>

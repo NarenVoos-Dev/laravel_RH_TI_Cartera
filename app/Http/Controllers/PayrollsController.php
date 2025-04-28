@@ -13,6 +13,7 @@ use App\Models\Payroll;
 use App\Models\PayrollDetail;
 use App\Models\PayrollDetailItem;
 use App\Services\PayrollCalculator;
+use App\Models\WalletMovement;
 
 //exportar excel
 use App\Exports\PayrollExport;
@@ -119,10 +120,11 @@ class PayrollsController extends Controller
         return view('payrolls.edit', compact('payroll', 'employees'));
     }
     //cerrar nómina
+
     public function close(Payroll $payroll)
     {
         $payroll->update(['status' => 'cerrada']);
-
+    
         return redirect()->route('payrolls.show', $payroll->id)
             ->with('success', 'Nómina cerrada correctamente. Ya no se pueden realizar modificaciones.');
     }
