@@ -90,7 +90,7 @@
         });
 
         //etiquetas de los botones de acción
-        $('[data-bs-toggle="tooltip"]').tooltip();
+       
 
     });
 

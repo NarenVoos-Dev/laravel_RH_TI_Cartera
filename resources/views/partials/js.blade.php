@@ -25,6 +25,8 @@
 
 <!-- Datatables -->
 <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
 
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -54,6 +56,8 @@
         document.querySelectorAll("form.show-loader").forEach(form => {
             form.addEventListener("submit", () => toggleLoader(true));
         });
+
+        $('[data-bs-toggle="tooltip"]').tooltip();
     });
 
     

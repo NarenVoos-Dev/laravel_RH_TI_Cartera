@@ -4,7 +4,7 @@
             <span class="app-brand-logo demo">
                 <!-- Logo SVG omitido por brevedad -->
             </span>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2">Intranet - Corp</span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">NomiVoos</span>
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="align-middle bx bx-chevron-left bx-sm"></i>

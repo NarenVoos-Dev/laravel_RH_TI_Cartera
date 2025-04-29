@@ -7,11 +7,13 @@
     <div class="mb-4 card-header">
         <ul class="nav nav-tabs card-header-tabs" id="dashboardTabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="accesos-tab" data-bs-toggle="tab" href="#accesos" role="tab">Accesos directos</a>
+                <a class="nav-link active" id="accesos-tab" data-bs-toggle="tab" href="#accesos" role="tab">Accesos
+                    directos</a>
             </li>
             @can('ver indicadores')
             <li class="nav-item">
-                <a class="nav-link" id="indicadores-tab" data-bs-toggle="tab" href="#indicadores" role="tab">Indicadores</a>
+                <a class="nav-link" id="indicadores-tab" data-bs-toggle="tab" href="#indicadores"
+                    role="tab">Indicadores</a>
             </li>
             @endcan
         </ul>
@@ -21,97 +23,128 @@
         {{-- ACCESOS DIRECTOS --}}
         <div class="tab-pane fade show active" id="accesos" role="tabpanel">
             <h5 class="mb-4">Te damos la bienvenida, ¿Qué deseas hacer?</h5>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div class="row g-4">
 
                 @can('crear nomina')
-                <div class="text-center col">
-                    <a href="{{ route('payrolls.create') }}" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-file fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-file fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Crear Nómina</h6>
+                            </div>
+                            <a href="{{ route('payrolls.create') }}"
+                                class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Crear Nómina</p>
-                    </a>
+                    </div>
                 </div>
                 @endcan
 
                 @can('gestionar empleados')
-                <div class="text-center col">
-                    <a href="{{ route('employees.index') }}" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-group fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-group fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Gestión de Empleados</h6>
+                            </div>
+                            <a href="{{ route('employees.index') }}"
+                                class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Gestión de Empleados</p>
-                    </a>
+                    </div>
                 </div>
                 @endcan
 
                 @can('cartera')
-                <div class="text-center col">
-                    <a href="{{ route('cartera.index') }}" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-wallet fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-wallet fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Carteras</h6>
+                            </div>
+                            <a href="{{ route('cartera.index') }}"
+                                class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Carteras</p>
-                    </a>
+                    </div>
                 </div>
                 @endcan
 
                 @can('ver colillas')
-                <div class="text-center col">
-                    <a href="{{ route('desprendibles.index') }}" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-file fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-file fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Mis Desprendibles</h6>
+                            </div>
+                            <a href="{{ route('desprendibles.index') }}"
+                                class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Mis Desprendibles</p>
-                    </a>
+                    </div>
                 </div>
                 @endcan
 
-                {{-- Puedes seguir agregando más accesos según permisos --}}
                 @can('ver roles')
-                <div class="text-center col">
-                    <a href="{{ route('roles.index') }}" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-id-card fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-id-card fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Roles</h6>
+                            </div>
+                            <a href="{{ route('roles.index') }}"
+                                class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Roles</p>
-                    </a>
+                    </div>
                 </div>
                 @endcan
 
                 @can('ver usuarios')
-                <div class="text-center col">
-                    <a href="{{ route('users.index') }}" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-user-circle fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-user-circle fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Usuarios</h6>
+                            </div>
+                            <a href="{{ route('users.index') }}"
+                                class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Usuarios</p>
-                    </a>
+                    </div>
                 </div>
                 @endcan
 
                 @can('ver companías')
-                <div class="text-center col">
-                    <a href="{{ route('companies.index') }}" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-buildings fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-buildings fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Compañías</h6>
+                            </div>
+                            <a href="{{ route('companies.index') }}"
+                                class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Compañías</p>
-                    </a>
+                    </div>
                 </div>
                 @endcan
 
-                <div class="text-center col">
-                    <a href="#" class="text-decoration-none text-dark">
-                        <div class="mx-auto mb-2 rounded-circle bg-light d-flex justify-content-center align-items-center" style="width:80px; height:80px;">
-                            <i class="bx bx-user fs-2 text-primary"></i>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="text-center shadow-sm card rounded-4 h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="mb-3">
+                                <i class="bx bx-user fs-1 text-primary"></i>
+                                <h6 class="mt-3 fw-semibold">Mi Perfil</h6>
+                            </div>
+                            <a href="#" class="mt-auto btn btn-primary rounded-pill">Ingresar</a>
                         </div>
-                        <p class="mb-0 fw-semibold">Mi Perfil</p>
-                    </a>
+                    </div>
                 </div>
 
             </div>
         </div>
+
 
         {{-- INDICADORES --}}
         @can('ver indicadores')
