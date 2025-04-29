@@ -24,15 +24,18 @@ class DatabaseSeeder extends Seeder
         //]);
         //Crear roles y permisos
         //$this->call(RoleSeeder::class);
-        //$this->call([ RolesAndPermissionsSeeder::class,]);
+        
+        $this->call([ RolesAndPermissionsSeeder::class,]);
+
         // Crear usuarios solo admin
-        //$this->call(UserSeeder::class);
+        $this->call(UserSeeder::class);
+        //crear permisos nuevos 
+        //$this->call([PermissionSeeder::class,]);    
         //$this->call(CompanySeeder::class);
 
         // deduciones y devengados basicos    
         //$this->call([EarningSeeder::class, DeductionSeeder::class,]);
         
-        //crear permisos nuevos 
-        $this->call([PermissionSeeder::class,]);
+       
     }
 }
