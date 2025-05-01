@@ -45,7 +45,7 @@
 
 <!-- CSS de Select2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
-
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 <style>
     @media (forced-colors: active) {
         body {
